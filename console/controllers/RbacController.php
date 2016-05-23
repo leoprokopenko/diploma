@@ -20,5 +20,8 @@ class RbacController extends Controller
         
         $constructor = $auth->createRole('constructor');
         $auth->add($constructor);
+
+        $supply = $auth->createRole('supple');
+        $auth->add($supply);
     }
 }

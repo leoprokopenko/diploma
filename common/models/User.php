@@ -25,10 +25,9 @@ class User extends ActiveRecord implements IdentityInterface
 {
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 10;
-    
+
     const ROLE_ADMIN = 100;
     const ROLE_MANAGER = 1;
-
 
     /**
      * @inheritdoc
@@ -54,8 +53,9 @@ class User extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-           [['name', 'phone', 'password', 'username'], 'string'],
-           ['email', 'email'],
+            [['name', 'phone', 'password', 'username'], 'string'],
+            ['email', 'email'],
+            ['role', 'in', 'range' => array_keys(self::roles())],
         ];
     }
 
@@ -116,7 +116,7 @@ class User extends ActiveRecord implements IdentityInterface
             return false;
         }
 
-        $timestamp = (int) substr($token, strrpos($token, '_') + 1);
+        $timestamp = (int)substr($token, strrpos($token, '_') + 1);
         $expire = Yii::$app->params['user.passwordResetTokenExpire'];
         return $timestamp + $expire >= time();
     }
@@ -197,18 +197,40 @@ class User extends ActiveRecord implements IdentityInterface
             'name' => 'ФИО',
             'phone' => 'Телефон',
             'password' => 'Пароль',
+            'roleName' => 'Должность',
         ];
     }
 
-    public function assignManager()
+    public function assignRole($role)
     {
         $auth = Yii::$app->authManager;
-        $authorRole = $auth->getRole('manager');
+        $authorRole = $auth->getRole($role);
+        $auth->revokeAll($this->getId());
         $auth->assign($authorRole, $this->getId());
     }
 
     public function getPassword()
     {
         return '';
+    }
+
+    public static function roles()
+    {
+        return [
+            'manager' => 'Менеджер',
+            'constructor' => 'Конструктор',
+            'supply' => 'Сотрудник отдела снабжения',
+        ];
+    }
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+        $this->assignRole($this->role);
+    }
+
+    public function getRoleName()
+    {
+        return self::roles()[$this->role];
     }
 }

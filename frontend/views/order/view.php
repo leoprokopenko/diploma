@@ -51,7 +51,11 @@ $comments = $model->orderComments;
         ],
     ]) ?>
 
-    <h2>Комментарии</h2>
+    <?= $this->render('_file_upload', [
+        'model' => $model,
+    ]) ?>
+
+    <h2>Ход работы</h2>
     
     <div class="comments-block">
         <?php foreach ($comments as $comment) {?>

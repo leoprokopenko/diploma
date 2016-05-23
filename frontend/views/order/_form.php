@@ -25,31 +25,9 @@ use yii\widgets\ActiveForm;
 
 
 
-    <?= \dosamigos\fileupload\FileUploadUI::widget([
+    <?= $this->render('_file_upload', [
         'model' => $model,
-        'attribute' => 'image',
-        'url' => ['media/upload', 'id' => $model->id],
-        'gallery' => true,
-        'load' => true,
-        'fieldOptions' => [
-            'accept' => 'image/*'
-        ],
-        'clientOptions' => [
-            'maxFileSize' => 2000000
-        ],
-        // ...
-        'clientEvents' => [
-            'fileuploaddone' => 'function(e, data) {
-                                    console.log(e);
-                                    console.log(data);
-                                }',
-            'fileuploadfail' => 'function(e, data) {
-                                    console.log(e);
-                                    console.log(data);
-                                }',
-        ],
-    ]);
-    ?>
+    ]) ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Создать заявку' : 'Обновить заявку', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

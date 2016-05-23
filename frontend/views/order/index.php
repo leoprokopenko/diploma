@@ -16,11 +16,30 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Создать заявку', ['create'], ['class' => 'btn btn-success']) ?>
+        <?php if (Yii::$app->user->can('manager')) {?>
+            <?= Html::a('Создать заявку', ['create'], ['class' => 'btn btn-success']) ?>
+        <?php } ?>
     </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'rowOptions' => function(\common\models\Order $model, $key, $index, $grid) {
+            switch ($model->role) {
+                case 'constructor':
+                    $colorClass = 'info';
+                    break;
+                case 'manager':
+                    $colorClass = 'danger';
+                    break;
+                case 'supply':
+                    $colorClass = 'success';
+                    break;
+                default:
+                    $colorClass = 'default';
+            }
+
+            return ['class' => $colorClass];
+        },
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 

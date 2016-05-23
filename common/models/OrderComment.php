@@ -76,4 +76,11 @@ class OrderComment extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Order::className(), ['id' => 'order_id']);
     }
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+        $this->order->role = $this->author->role;
+        $this->order->save(false, ['role']);
+    }
 }

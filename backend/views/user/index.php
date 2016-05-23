@@ -7,7 +7,7 @@ use yii\grid\GridView;
 /* @var $searchModel common\models\UserSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Менеджеры';
+$this->title = 'Сотрудники';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-index">
@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Добавить менеджера', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Добавить сотрудника', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -28,6 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'name',
             'email:email',
             'phone',
+            'roleName',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

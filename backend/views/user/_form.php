@@ -12,6 +12,7 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
+    <?= $form->field($model, 'role')->dropDownList(\common\models\User::roles()) ?>
     <?= $form->field($model, 'username')->textInput() ?>
     <?= $form->field($model, 'name')->textInput() ?>
     <?= $form->field($model, 'email')->textInput() ?>

@@ -28,6 +28,12 @@ class OrderController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
+                        'actions' => ['create', 'update', 'delete'],
+                        'allow' => true,
+                        'roles' => ['manager'],
+                    ],
+                    [
+                        'actions' => ['index', 'view', 'add-comment'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
