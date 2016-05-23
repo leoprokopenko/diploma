@@ -8,7 +8,7 @@ class m160523_084525_add_foreign_keys extends Migration
     {
         $this->addForeignKey('fk_client_manager', 'client', 'manager_id', 'user', 'id');
        
-        $this->addForeignKey('fk_order_client', 'order', 'client_id', 'client', 'id');
+        $this->addForeignKey('fk_order_client', 'order', 'client_id', 'client', 'id', 'CASCADE', 'CASCADE');
         $this->addForeignKey('fk_order_manager', 'order', 'manager_id', 'user', 'id');
     }
 

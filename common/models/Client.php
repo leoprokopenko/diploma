@@ -14,7 +14,7 @@ use Yii;
  * @property string $comment
  * @property integer $manager_id
  *
- * @property Manager $manager
+ * @property User $manager
  * @property Order[] $orders
  */
 class Client extends \yii\db\ActiveRecord
@@ -49,11 +49,10 @@ class Client extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Name',
-            'phone' => 'Phone',
-            'address' => 'Address',
-            'comment' => 'Comment',
-            'manager_id' => 'Manager ID',
+            'name' => 'Наименование',
+            'phone' => 'Телефон',
+            'address' => 'Адрес',
+            'comment' => 'Примечание',
         ];
     }
 
@@ -62,7 +61,7 @@ class Client extends \yii\db\ActiveRecord
      */
     public function getManager()
     {
-        return $this->hasOne(Manager::className(), ['id' => 'manager_id']);
+        return $this->hasOne(User::className(), ['id' => 'manager_id']);
     }
 
     /**

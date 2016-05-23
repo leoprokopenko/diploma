@@ -7,7 +7,7 @@ use yii\widgets\DetailView;
 /* @var $model common\models\Order */
 
 $this->title = $model->title;
-$this->params['breadcrumbs'][] = ['label' => 'Orders', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Заявки', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
 $comments = $model->orderComments;
@@ -17,28 +17,41 @@ $comments = $model->orderComments;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) ?>
+        <?php if ($model->manager_id === Yii::$app->user->getId()) {?>
+            <?= Html::a('Изменить', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+            <?= Html::a('Удалить заявку', ['delete', 'id' => $model->id], [
+                'class' => 'btn btn-danger',
+                'data' => [
+                    'confirm' => 'Are you sure you want to delete this item?',
+                    'method' => 'post',
+                ],
+            ]) ?>
+        <?php } ?>
     </p>
 
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
-            'client_id',
-            'manager_id',
-            'created_at',
-            'updated_at',
+            [
+                'label' => 'Менеджер',
+                'attribute' => 'manager.name',
+            ],
+            [
+                'label' => 'Клиент',
+                'attribute' => 'client.name',
+            ],
             'title',
+            [
+                'label' => 'Дата заведения заявки',
+                'attribute' => 'created_at',
+                'format' => 'datetime',
+            ],
+            
             'description:ntext',
         ],
     ]) ?>
+
+    <h2>Комментарии</h2>
     
     <div class="comments-block">
         <?php foreach ($comments as $comment) {?>
@@ -51,5 +64,4 @@ $comments = $model->orderComments;
     <?= $this->render('_comment_form', [
         'order_id' => $model->id,
     ]) ?>
-
 </div>

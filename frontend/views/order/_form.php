@@ -23,10 +23,37 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'description')->textarea(['rows' => 6]) ?>
 
+
+
+    <?= \dosamigos\fileupload\FileUploadUI::widget([
+        'model' => $model,
+        'attribute' => 'image',
+        'url' => ['media/upload', 'id' => $model->id],
+        'gallery' => true,
+        'load' => true,
+        'fieldOptions' => [
+            'accept' => 'image/*'
+        ],
+        'clientOptions' => [
+            'maxFileSize' => 2000000
+        ],
+        // ...
+        'clientEvents' => [
+            'fileuploaddone' => 'function(e, data) {
+                                    console.log(e);
+                                    console.log(data);
+                                }',
+            'fileuploadfail' => 'function(e, data) {
+                                    console.log(e);
+                                    console.log(data);
+                                }',
+        ],
+    ]);
+    ?>
+
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton($model->isNewRecord ? 'Создать заявку' : 'Обновить заявку', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
-
 </div>

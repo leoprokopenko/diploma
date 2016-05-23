@@ -17,10 +17,11 @@ use yii\behaviors\TimestampBehavior;
  * @property string $description
  *
  * @property Client $client
- * @property Manager $manager
+ * @property User $manager
  */
 class Order extends \yii\db\ActiveRecord
 {
+    public $image;
     /**
      * @inheritdoc
      */

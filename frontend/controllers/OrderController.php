@@ -78,6 +78,8 @@ class OrderController extends Controller
     {
         $model = new Order();
         $model->manager_id = Yii::$app->user->getId();
+        $model->image ='123123';
+
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);

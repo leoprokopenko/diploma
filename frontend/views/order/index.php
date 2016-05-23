@@ -33,6 +33,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'manager.name',
             ],
             'title',
+            [
+                'label' => 'Дата заведения заявки',
+                'attribute' => 'created_at',
+                'format' => 'datetime',
+            ],
 
 
             ['class' => 'yii\grid\ActionColumn'],
