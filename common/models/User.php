@@ -54,8 +54,8 @@ class User extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            ['status', 'default', 'value' => self::STATUS_ACTIVE],
-            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
+           [['name', 'phone', 'password', 'username'], 'string'],
+           ['email', 'email'],
         ];
     }
 
@@ -188,5 +188,27 @@ class User extends ActiveRecord implements IdentityInterface
     public function removePasswordResetToken()
     {
         $this->password_reset_token = null;
+    }
+
+    public function attributeLabels()
+    {
+        return [
+            'username' => 'Логин',
+            'name' => 'ФИО',
+            'phone' => 'Телефон',
+            'password' => 'Пароль',
+        ];
+    }
+
+    public function assignManager()
+    {
+        $auth = Yii::$app->authManager;
+        $authorRole = $auth->getRole('manager');
+        $auth->assign($authorRole, $this->getId());
+    }
+
+    public function getPassword()
+    {
+        return '';
     }
 }
