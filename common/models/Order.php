@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "order".
@@ -28,18 +29,24 @@ class Order extends \yii\db\ActiveRecord
         return 'order';
     }
 
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::className(),
+        ];
+    }
+
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['client_id', 'manager_id', 'created_at', 'updated_at', 'title'], 'required'],
-            [['client_id', 'manager_id', 'created_at', 'updated_at'], 'integer'],
+            [['client_id', 'title'], 'required'],
+            [['client_id'], 'integer'],
             [['description'], 'string'],
             [['title'], 'string', 'max' => 255],
             [['client_id'], 'exist', 'skipOnError' => true, 'targetClass' => Client::className(), 'targetAttribute' => ['client_id' => 'id']],
-            [['manager_id'], 'exist', 'skipOnError' => true, 'targetClass' => Manager::className(), 'targetAttribute' => ['manager_id' => 'id']],
         ];
     }
 
@@ -50,12 +57,9 @@ class Order extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'client_id' => 'Client ID',
-            'manager_id' => 'Manager ID',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
-            'title' => 'Title',
-            'description' => 'Description',
+            'client_id' => 'Клиент',
+            'title' => 'Заголовок',
+            'description' => 'Описание заявки',
         ];
     }
 
@@ -72,6 +76,11 @@ class Order extends \yii\db\ActiveRecord
      */
     public function getManager()
     {
-        return $this->hasOne(Manager::className(), ['id' => 'manager_id']);
+        return $this->hasOne(User::className(), ['id' => 'manager_id']);
+    }
+    
+    public function getOrderComments()
+    {
+        return $this->hasMany(OrderComment::className(), ['order_id' => 'id']);
     }
 }

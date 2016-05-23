@@ -9,6 +9,8 @@ use yii\widgets\DetailView;
 $this->title = $model->title;
 $this->params['breadcrumbs'][] = ['label' => 'Orders', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+
+$comments = $model->orderComments;
 ?>
 <div class="order-view">
 
@@ -36,6 +38,18 @@ $this->params['breadcrumbs'][] = $this->title;
             'title',
             'description:ntext',
         ],
+    ]) ?>
+    
+    <div class="comments-block">
+        <?php foreach ($comments as $comment) {?>
+            <?= $this->render('_comment_item', [
+                'model' => $comment,
+            ]) ?>
+        <?php } ?>
+    </div>
+
+    <?= $this->render('_comment_form', [
+        'order_id' => $model->id,
     ]) ?>
 
 </div>

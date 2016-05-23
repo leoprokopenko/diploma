@@ -12,13 +12,12 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'client_id')->textInput() ?>
-
-    <?= $form->field($model, 'manager_id')->textInput() ?>
-
-    <?= $form->field($model, 'created_at')->textInput() ?>
-
-    <?= $form->field($model, 'updated_at')->textInput() ?>
+    <?= Html::a('Добавить клиента', ['client/create']) ?>
+    <?= $form->field($model, 'client_id')->listBox(\common\models\Client::find()
+        ->select(['name', 'id'])
+        ->indexBy('id')
+        ->column()
+    ) ?>
 
     <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 

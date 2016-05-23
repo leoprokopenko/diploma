@@ -8,9 +8,11 @@ $params = array_merge(
 
 return [
     'id' => 'app-frontend',
+    'language' => 'ru_RU',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'controllerNamespace' => 'frontend\controllers',
+    'defaultRoute' => 'order',
     'components' => [
         'user' => [
             'identityClass' => 'common\models\User',
@@ -34,6 +36,9 @@ return [
             'showScriptName' => false,
             'rules' => [
             ],
+        ],
+        'assetManager' => [
+            'appendTimestamp' => true,
         ],
         
     ],

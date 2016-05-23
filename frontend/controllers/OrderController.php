@@ -2,9 +2,13 @@
 
 namespace frontend\controllers;
 
+use common\models\OrderComment;
 use Yii;
 use common\models\Order;
 use common\models\OrderSearch;
+use yii\filters\AccessControl;
+use yii\helpers\VarDumper;
+use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -20,6 +24,15 @@ class OrderController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -64,6 +77,7 @@ class OrderController extends Controller
     public function actionCreate()
     {
         $model = new Order();
+        $model->manager_id = Yii::$app->user->getId();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -119,6 +133,22 @@ class OrderController extends Controller
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+
+    public function actionAddComment()
+    {
+        $comment = new OrderComment();
+        $comment->author_id = Yii::$app->user->getId();
+        $comment->order_id = Yii::$app->request->post('order_id');
+        $comment->message = Yii::$app->request->post('message');
+
+        if ($comment->save()) {
+            return $this->renderAjax('_comment_item', [
+                'model' => $comment,
+            ]);
+        } else {
+            throw new BadRequestHttpException(VarDumper::dumpAsString($comment->errors));
         }
     }
 }

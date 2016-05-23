@@ -38,7 +38,7 @@ class Client extends \yii\db\ActiveRecord
             [['manager_id'], 'integer'],
             [['name', 'address'], 'string', 'max' => 255],
             [['phone'], 'string', 'max' => 20],
-            [['manager_id'], 'exist', 'skipOnError' => true, 'targetClass' => Manager::className(), 'targetAttribute' => ['manager_id' => 'id']],
+            [['manager_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['manager_id' => 'id']],
         ];
     }
 
