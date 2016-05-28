@@ -220,6 +220,7 @@ class User extends ActiveRecord implements IdentityInterface
             'manager' => 'Менеджер',
             'constructor' => 'Конструктор',
             'supply' => 'Сотрудник отдела снабжения',
+            'boss' => 'Начальник производства',
         ];
     }
 

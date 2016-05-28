@@ -13,6 +13,9 @@ switch ($model->author->role) {
     case 'supply':
         $colorClass = 'panel-success';
         break;
+    case 'boss':
+        $colorClass = 'panel-warning';
+        break;
     default:
         $colorClass = 'panel-default';
 }
