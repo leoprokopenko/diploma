@@ -35,7 +35,7 @@ class RbacController extends Controller
         $supply = $this->auth->createRole('supple');
         $this->auth->add($supply);
         
-        
+        $this->actionAddBoss();
     }
     
     public function actionAddBoss()
