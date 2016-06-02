@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use common\models\Image;
 use yii\helpers\FileHelper;
 use yii\helpers\Json;
 use yii\helpers\Url;
@@ -10,20 +11,47 @@ use yii\web\UploadedFile;
 
 class MediaController extends Controller
 {
-    public function actionUpload()
+    public function actionUpload($id)
     {
-        \Yii::$app->session->open();
+        if (\Yii::$app->request->isGet) {
+            $images = Image::find()
+                ->where(['order_id' => $id]);
+            $files = [];
+
+            foreach ($images->each() as $image) {
+                $files[] = [
+                    'name' => $image->name,
+                    'size' => $image->size,
+                    "url" => '/img/temp/' . DIRECTORY_SEPARATOR . $image->fileName,
+                    "thumbnailUrl" => '/img/temp/' . DIRECTORY_SEPARATOR . $image->fileName,
+                    "deleteUrl" => Url::to(['/media/delete', 'name' => $image->fileName]),
+                    "deleteType" => "POST"
+                ];
+            }
+
+            return Json::encode([
+                'files' => $files,
+            ]);
+        }
+
         $imageFile = UploadedFile::getInstanceByName('Order[image]');
-        $directory = \Yii::getAlias('@frontend/web/img/temp') . DIRECTORY_SEPARATOR . \Yii::$app->session->id . DIRECTORY_SEPARATOR;
+        $directory = \Yii::getAlias('@frontend/web/img/temp') . DIRECTORY_SEPARATOR;
         if (!is_dir($directory)) {
-            mkdir($directory);
+            mkdir($directory, 0777, true);
         }
         if ($imageFile) {
             $uid = uniqid(time(), true);
             $fileName = $uid . '.' . $imageFile->extension;
             $filePath = $directory . $fileName;
-            if ($imageFile->saveAs($filePath)) {
-                $path = '/img/temp/' . \Yii::$app->session->id . DIRECTORY_SEPARATOR . $fileName;
+
+            $image = new Image();
+            $image->order_id = $id;
+            $image->fileName = $fileName;
+            $image->name = $fileName;
+            $image->size = $imageFile->size;
+
+            if ($imageFile->saveAs($filePath) && $image->save()) {
+                $path = '/img/temp/' . DIRECTORY_SEPARATOR . $fileName;
                 return Json::encode([
                     'files' => [[
                         'name' => $fileName,
@@ -41,15 +69,15 @@ class MediaController extends Controller
 
     public function actionDelete($name)
     {
-        \Yii::$app->session->open();
-        $directory = \Yii::getAlias('@frontend/web/img/temp') . DIRECTORY_SEPARATOR . \Yii::$app->session->id;
+        $directory = \Yii::getAlias('@frontend/web/img/temp') . DIRECTORY_SEPARATOR;
         if (is_file($directory . DIRECTORY_SEPARATOR . $name)) {
             unlink($directory . DIRECTORY_SEPARATOR . $name);
+            Image::deleteAll(['fileName' => $name]);
         }
         $files = FileHelper::findFiles($directory);
         $output = [];
         foreach ($files as $file){
-            $path = '/img/temp/' . \Yii::$app->session->id . DIRECTORY_SEPARATOR . basename($file);
+            $path = '/img/temp/' . DIRECTORY_SEPARATOR . basename($file);
             $output['files'][] = [
                 'name' => basename($file),
                 'size' => filesize($file),

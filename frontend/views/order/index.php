@@ -34,6 +34,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 case 'supply':
                     $colorClass = 'success';
                     break;
+                case 'boss':
+                    $colorClass = 'warning';
+                    break;
                 default:
                     $colorClass = 'default';
             }

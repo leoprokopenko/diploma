@@ -23,12 +23,6 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'description')->textarea(['rows' => 6]) ?>
 
-
-
-    <?= $this->render('_file_upload', [
-        'model' => $model,
-    ]) ?>
-
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Создать заявку' : 'Обновить заявку', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
